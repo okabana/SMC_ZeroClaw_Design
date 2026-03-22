@@ -74,6 +74,7 @@ zeroclaw zone_summary --dsn 'postgresql://user:pass@localhost:5432/app' --produc
 
 - DB 接続は `psycopg` を optional dependency にしています。
 - LLM に生データを渡さず、構造化済みデータから日本語要約を作る方針です。
+- 該当データが未投入の場合、CLI は traceback ではなく「データ不足」の案内文を返します。
 - 注文執行ロジックは含めていません。
 - 勝敗や損益の集計ロジックは、実運用の約定スキーマに合わせて調整してください。
 

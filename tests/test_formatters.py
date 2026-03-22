@@ -1,8 +1,9 @@
 from datetime import datetime
 
-from zeroclaw.db import parse_review_date
+from zeroclaw.db import command_output, parse_review_date
 from zeroclaw.formatters import (
     format_market_summary,
+    format_no_data,
     format_review_summary,
     format_risk_status,
     format_signal_summary,
@@ -79,3 +80,19 @@ def test_parse_review_date_defaults_to_midnight_today():
     parsed = parse_review_date(None)
     assert parsed.hour == 0
     assert parsed.minute == 0
+
+
+def test_format_no_data_returns_user_friendly_message():
+    text = format_no_data("latest_bias", "BTC_JPY", "15m")
+    assert "データ不足です" in text
+    assert "BTC_JPY 15m" in text
+
+
+def test_command_output_returns_no_data_message_on_missing_snapshot():
+    class DummyClient:
+        def latest_bias(self, product_code, timeframe):
+            raise LookupError(f"market_structure_snapshots not found for {product_code} {timeframe}")
+
+    text = command_output(DummyClient(), "latest_bias", "BTC_JPY", "15m")
+    assert "データ不足です" in text
+    assert "latest_bias" in text

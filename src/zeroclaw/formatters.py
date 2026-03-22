@@ -7,6 +7,16 @@ def _fmt_price(value: float | None) -> str:
     return f"{value:,.0f}" if value is not None else "データ不足"
 
 
+def format_no_data(command: str, product_code: str, timeframe: str | None = None) -> str:
+    scope = product_code if timeframe is None else f"{product_code} {timeframe}"
+    return (
+        "結論:\nデータ不足です。\n\n"
+        f"根拠:\n- {command} に必要なデータが {scope} では見つかりませんでした。\n\n"
+        "未充足条件:\n- 対象テーブルに最新データが保存されているか確認してください。\n\n"
+        "監視ポイント:\n- product_code / timeframe の指定\n- 取り込みジョブの保存成否\n- captured_at / detected_at / exec_date の更新状況"
+    )
+
+
 def format_market_summary(snapshot: MarketStructureSnapshot) -> str:
     notes = snapshot.note_json or {}
     watch_points = notes.get("watch_points", [])

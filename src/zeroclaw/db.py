@@ -160,6 +160,7 @@ def parse_review_date(raw: str | None) -> datetime:
 def command_output(client: DatabaseClient, command: str, product_code: str, timeframe: str, review_date: str | None = None) -> str:
     from .formatters import (
         format_market_summary,
+        format_no_data,
         format_review_summary,
         format_risk_status,
         format_signal_summary,
@@ -167,9 +168,15 @@ def command_output(client: DatabaseClient, command: str, product_code: str, time
     )
 
     if command == "latest_bias":
-        return format_market_summary(client.latest_bias(product_code, timeframe))
+        try:
+            return format_market_summary(client.latest_bias(product_code, timeframe))
+        except LookupError:
+            return format_no_data(command, product_code, timeframe)
     if command == "latest_signal":
-        return format_signal_summary(client.latest_signal(product_code, timeframe))
+        try:
+            return format_signal_summary(client.latest_signal(product_code, timeframe))
+        except LookupError:
+            return format_no_data(command, product_code, timeframe)
     if command == "daily_review":
         return format_review_summary(client.daily_review(product_code, parse_review_date(review_date)))
     if command == "risk_status":

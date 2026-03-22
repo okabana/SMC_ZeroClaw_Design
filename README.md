@@ -43,6 +43,23 @@ source .venv/bin/activate
 pip install -e .[postgres,test]
 ```
 
+## SQL スキーマ
+
+初期テーブルをまとめて作成する SQL を `sql/001_create_core_tables.sql` に追加しています。
+
+```bash
+psql 'postgresql://user:pass@localhost:5432/app' -f sql/001_create_core_tables.sql
+```
+
+この SQL では以下を作成します。
+
+- `multi_asset_executions`
+- `market_structure_snapshots`
+- `smc_zones`
+- `trade_signals`
+- `trade_reviews`
+- `notifications`
+
 ## CLI 実行例
 
 ```bash

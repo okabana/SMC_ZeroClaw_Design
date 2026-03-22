@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "smc-zeroclaw-design"
+version = "0.1.0"
+description = "Phase 1 scaffold for ZeroClaw, an SMC trading support and monitoring assistant"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+postgres = ["psycopg[binary]>=3.1"]
+
+test = ["pytest>=8.0"]
+
+[project.scripts]
+zeroclaw = "zeroclaw.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
